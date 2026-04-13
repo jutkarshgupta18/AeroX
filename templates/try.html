@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Jost', sans-serif;
+            background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+        }
+        .main{
+            width: 350px;
+            height: 400px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 5px 20px 50px #000;
+            padding: 20px;
+        }
+        label{
+            color: #573b8a;
+            font-size: 2em;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+        input{
+            width: 80%;
+            margin: 15px auto;
+            display: block;
+            padding: 12px;
+            border-radius: 5px;
+            border: none;
+            background: #e0dede;
+        }
+        button{
+            width: 80%;
+            height: 40px;
+            margin: 20px auto;
+            display: block;
+            color: #fff;
+            background: #573b8a;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover{
+            background: #6d44b8;
+        }
+        .link{
+            text-align: center;
+        }
+        .link a{
+            color: #573b8a;
+            text-decoration: none;
+        }
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            text-align: center;
+        }
+        .flashes li {
+            padding: 10px;
+            margin-bottom: 5px;
+            color: white;
+            font-weight: bold;
+        }
+        .error { background-color: #e74c3c; }
+        .success { background-color: #2ecc71; }
+    </style>
+</head>
+<body>
+
+
+<ul class="flashes">
+
+<li class="{{ category }}"></li>
+
+</ul>
+
+
+<div class="main">
+    <form>
+        <label>Login</label>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button>Login</button>
+    </form>
+
+    <div class="link">
+        <p>Don't have an account? <a href="register.html">Register</a></p>
+    </div>
+</div>
+
+</body>
+</html>

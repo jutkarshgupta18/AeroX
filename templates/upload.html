@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AeroScan | Object Detection</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<style>
+    :root {
+    --neon-blue: #00f2ff;
+    --dark-bg: #0a0e14;
+    --panel-bg: rgba(255, 255, 255, 0.05);
+}
+/* Add this to your existing CSS */
+#bg-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1; /* Keeps it behind everything */
+    background-color: #05080a;
+}
+
+.main-container {
+    /* Add a slight backdrop blur to make the UI pop against the animation */
+    backdrop-filter: blur(4px);
+    background: rgba(10, 14, 20, 0.7);
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(0, 242, 255, 0.2);
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+/* Background HUD Effect */
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 20%, var(--dark-bg) 80%),
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+    background-size: 100% 100%, 50px 50px, 50px 50px;
+    z-index: -1;
+}
+
+.main-container {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+h1 span { color: var(--neon-blue); font-weight: bold; }
+
+.upload-box {
+    position: relative;
+    border: 2px dashed var(--neon-blue);
+    background: var(--panel-bg);
+    border-radius: 15px;
+    padding: 50px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.upload-box:hover {
+    background: rgba(0, 242, 255, 0.1);
+    box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+}
+
+/* The Scanning Animation */
+.scanner-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: var(--neon-blue);
+    box-shadow: 0 0 15px var(--neon-blue);
+    animation: scan 3s infinite ease-in-out;
+    display: none; /* Shows after upload */
+}
+
+@keyframes scan {
+    0% { top: 0; }
+    50% { top: 100%; }
+    100% { top: 0; }
+}
+
+.btn {
+    background: var(--neon-blue);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.stats-panel {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    font-family: monospace;
+    color: var(--neon-blue);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+</style>
+<body>
+
+    <div class="main-container">
+        <header>
+            <h1>AERIAL<span>Detect</span></h1>
+            <p>Satellite Intelligence & Object Recognition</p>
+        </header>
+
+        <div class="upload-box" id="drop-zone">
+            <div class="scanner-line"></div>
+            <div class="content">
+                <div class="icon">🔍 </div>
+                <p>Drag & Drop Aerial Imagery</p>
+                <span>or</span>
+                <button class="btn" onclick="document.getElementById('fileInput').click()">Select File</button>
+                <input type="file" id="fileInput" hidden accept="image/*">
+            </div>
+            <div id="preview-container"></div>
+        </div>
+
+    </div>
+    <body>
+    <canvas id="bg-canvas"></canvas>
+
+</body>
+
+    <script src="script.js"></script>
+    <script>
+        const dropZone = document.getElementById('drop-zone');
+const scanner = document.querySelector('.scanner-line');
+const fileInput = document.getElementById('fileInput');
+
+// Trigger scan effect on file selection
+fileInput.addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+        startScanning();
+    }
+});
+
+function startScanning() {
+    scanner.style.display = 'block';
+    document.querySelector('.content').innerHTML = `
+        <p style="color: #00f2ff;">ANALYZING COORD... SCANNING FOR TARGETS</p>
+    `;
+    
+    // In a real app, you'd send the file to your Python/Flask backend here
+    setTimeout(() => {
+        alert("Image processed! (Simulated result)");
+    }, 4000);
+}
+
+// Basic Drag & Drop Handlers
+dropZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropZone.style.borderColor = "#fff";
+});
+
+dropZone.addEventListener('dragleave', () => {
+    dropZone.style.borderColor = "var(--neon-blue)";
+});
+
+dropZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    startScanning();
+});
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// Characters: Hex codes and coordinates look "Aerial/Tech"
+const alphabet = "0123456789ABCDEF+-[ ]XYZ";
+const fontSize = 14;
+const columns = canvas.width / fontSize;
+
+const rainDrops = Array.from({ length: columns }).fill(1);
+
+function draw() {
+    // Faint black rectangle to create a trailing effect
+    ctx.fillStyle = "rgba(5, 8, 10, 0.1)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00f2ff22"; // Very faint cyan for the "code"
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < rainDrops.length; i++) {
+        const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+
+        if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+            rainDrops[i] = 0;
+        }
+        rainDrops[i]++;
+    }
+}
+
+// Update resize handler
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+
+setInterval(draw, 40);
+    </script>
+</body>
+</html>
