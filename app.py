@@ -93,7 +93,7 @@ def login():
         flash('Invalid email or password.', 'error')
         return redirect(url_for('auth'))
 
-@app.route('/upload',methods=['POST'])
+@app.route('/upload', methods=['GET','POST'])
 def Upload():
     return render_template('upload.html')
 

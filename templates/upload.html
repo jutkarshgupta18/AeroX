@@ -124,7 +124,7 @@ h1 span { color: var(--neon-blue); font-weight: bold; }
 
     <div class="main-container">
         <header>
-            <h1>AERIAL<span>Detect</span></h1>
+            <h1>AERO<span>X</span></h1>
             <p>Satellite Intelligence & Object Recognition</p>
         </header>
 
@@ -134,8 +134,10 @@ h1 span { color: var(--neon-blue); font-weight: bold; }
                 <div class="icon">🔍 </div>
                 <p>Drag & Drop Aerial Imagery</p>
                 <span>or</span>
+                <form method="POST" action="/register">
                 <button class="btn" onclick="document.getElementById('fileInput').click()">Select File</button>
                 <input type="file" id="fileInput" hidden accept="image/*">
+                </form>-
             </div>
             <div id="preview-container"></div>
         </div>
