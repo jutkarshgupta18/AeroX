@@ -248,6 +248,9 @@ def predict():
     
     return render_template('predict.html', filename=filename, time=inf_time, stats=stats)
 
+@app.route('/upload', methods=['GET','POST'])
+def Upload():
+    return render_template('upload.html')
 
         
 if __name__ == '__main__':
